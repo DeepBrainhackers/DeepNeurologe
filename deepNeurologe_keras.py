@@ -1,7 +1,7 @@
 from keras.layers import Conv3D, Dropout, Input, Dense, MaxPooling3D, BatchNormalization, Flatten, Activation
 from keras.models import Model
 import keras.backend as K
-from keras.metrics import binary_accuracy
+import tensorflow as tf
 
 
 def deep_neurologe_net(input_shape, conv_params, max_pool_params, fc_params, dropout_params, output_params,
@@ -135,6 +135,7 @@ def balanced_accuracy(y_true, y_pred):
     :param y_pred: 
     :return: 
     """
+    tf.Print(y_pred, [y_pred])
     y_pred_onehot = K.one_hot(K.argmax(y_pred, axis=1), num_classes=2)
     return K.mean(K.sum(y_true * y_pred_onehot, axis=0) / K.cast(K.sum(y_true, axis=0), K.floatx()))
 
