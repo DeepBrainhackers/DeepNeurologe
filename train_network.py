@@ -24,7 +24,7 @@ def run(data_folder, batch_size=1):
     y_test = to_categorical(y_test, num_classes=2)
 
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=200, verbose=1, mode='min')
-    lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=1, mode='min', min_lr=1e-5)
+    lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.9, patience=20, verbose=1, mode='min', min_lr=1e-4)
     csv_logger = CSVLogger(osp.join(data_folder, 'training.log'))
     tensorboard = TensorBoard(log_dir=osp.join(data_folder, 'tensorboard'), histogram_freq=1, write_graph=True,
                               write_images=True)

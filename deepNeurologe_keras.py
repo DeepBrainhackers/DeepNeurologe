@@ -1,6 +1,7 @@
 from keras.layers import Conv3D, Dropout, Input, Dense, MaxPooling3D, BatchNormalization, Flatten, Activation
 from keras.models import Model
 import keras.backend as K
+from keras.metrics import binary_accuracy
 
 
 def deep_neurologe_net(input_shape, conv_params, max_pool_params, fc_params, dropout_params, output_params,
@@ -86,13 +87,13 @@ def init_network(n_classes=2):
     input_dtype = K.floatx()
 
     conv_params = [
-        {'filters': 128, 'kernel_size': (5, 5, 5), 'strides': (2, 2, 2)},
+        {'filters': 128, 'kernel_size': (5, 5, 5), 'strides': (1, 1, 1)},
         {'filters': 64, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
         {'filters': 32, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
         {'filters': 16, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)}
     ]
     maxpooling_params = [
-        {'pool_size': (2, 2, 2), 'strides': (2, 2, 2)},
+        {'pool_size': (2, 2, 2), 'strides': (1, 1, 1)},
         {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)},
         {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)},
         {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)}
@@ -135,7 +136,7 @@ def balanced_accuracy(y_true, y_pred):
     :return: 
     """
     y_pred_onehot = K.one_hot(K.argmax(y_pred, axis=1), num_classes=2)
-    return K.mean(K.sum(y_true * y_pred_onehot, axis=0) / K.sum(y_true, axis=0))
+    return K.mean(K.sum(y_true * y_pred_onehot, axis=0) / K.cast(K.sum(y_true, axis=0), K.floatx()))
 
 
 def test_network():
