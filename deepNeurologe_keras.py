@@ -12,7 +12,7 @@ def deep_neurologe_net(input_shape, conv_params, max_pool_params, fc_params, dro
     :param max_pool_params:     list of dictionaries (each dictionary a layer)
     :param fc_params:           list of dictionaries (each dictionary a layer)
     :param dropout_params:      dictionary: {fc_layer_number: dropout_value}, starting from 1 or None
-    :param output_params:        list of dictionaries (each dictionary a final layer)
+    :param output_params:       list of dictionaries (each dictionary a final layer)
     :param input_dtype:         default: tf.float32               
     :return: 
     """
