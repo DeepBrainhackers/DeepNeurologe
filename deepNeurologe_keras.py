@@ -87,20 +87,20 @@ def init_network(n_classes=2):
     input_dtype = K.floatx()
 
     conv_params = [
-        {'filters': 128, 'kernel_size': (5, 5, 5), 'strides': (1, 1, 1)},
-        {'filters': 64, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
+        {'filters': 64, 'kernel_size': (5, 5, 5), 'strides': (1, 1, 1)},
         {'filters': 32, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
-        {'filters': 16, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)}
+        {'filters': 16, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
+        {'filters': 8, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)}
     ]
     maxpooling_params = [
-        {'pool_size': (2, 2, 2), 'strides': (1, 1, 1)},
-        {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)},
-        {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)},
-        {"pool_size": (2, 2, 2), 'strides': (1, 1, 1)}
+        {'pool_size': (4, 4, 4), 'strides': (1, 1, 1)},
+        {"pool_size": (4, 4, 4), 'strides': (1, 1, 1)},
+        {"pool_size": (4, 4, 4), 'strides': (1, 1, 1)},
+        {"pool_size": (4, 4, 4), 'strides': (1, 1, 1)}
 
     ]
     fc_params = [
-        {'units': 1000},
+        {'units': 500},
         {'units': 100},
         {'units': 50}
     ]
@@ -122,7 +122,7 @@ def init_network(n_classes=2):
 
     model = deep_neurologe_net(input_shape, conv_params, maxpooling_params, fc_params, dropout_params, output_params,
                                input_dtype)
-    model.compile(optimizer='sgd', loss=loss, metrics=['accuracy', balanced_accuracy], loss_weights=loss_weights)
+    model.compile(optimizer='adam', loss=loss, metrics=['accuracy', balanced_accuracy], loss_weights=loss_weights)
     model.summary()
     return model
 

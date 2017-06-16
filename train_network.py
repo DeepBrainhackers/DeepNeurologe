@@ -8,7 +8,7 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau, CSVLogger, TensorB
 from data_handling import load_data, load_labels, get_network
 
 
-def run(data_folder, save_folder, batch_size=1):
+def run(data_folder, save_folder, batch_size=10):
     if not osp.exists(save_folder):
         os.makedirs(save_folder)
 	
@@ -27,14 +27,14 @@ def run(data_folder, save_folder, batch_size=1):
     y_valid = to_categorical(y_valid, num_classes=2)
     y_test = to_categorical(y_test, num_classes=2)
 
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=200, verbose=1, mode='min')
-    lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.9, patience=20, verbose=1, mode='min', min_lr=1e-4)
+    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=1000, verbose=1, mode='min')
+    #lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=1., patience=1000, verbose=1, mode='min', min_lr=1e-4)
     csv_logger = CSVLogger(osp.join(save_folder, 'training.log'))
     tensorboard = TensorBoard(log_dir=osp.join(save_folder, 'tensorboard'), histogram_freq=0, write_graph=True,
                               write_images=True)
 
     network.fit(x=X_train, y=y_train, batch_size=batch_size, epochs=1000, verbose=1, validation_data=(X_valid, y_valid),
-                shuffle=True, callbacks=[early_stopping, lr_scheduler, csv_logger, tensorboard])
+                shuffle=True, callbacks=[early_stopping, csv_logger, tensorboard])
 
     network.evaluate(x=X_test, y=y_test, batch_size=1, verbose=1)
 
