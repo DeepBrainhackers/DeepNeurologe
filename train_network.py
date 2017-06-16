@@ -49,7 +49,7 @@ def run(data_folder, save_folder, batch_size=10):
                     validation_data=(X_valid, y_valid), shuffle=True,
                     callbacks=[early_stopping, csv_logger, tensorboard])
 
-        loss, acc, bal_acc = network.evaluate(x=X_test, y=y_test, batch_size=10, verbose=1)
+        loss, acc, bal_acc = network.evaluate(x=X_test, y=y_test, batch_size=y_test.size, verbose=1)
         print 'Test: '
         print loss, acc, bal_acc
         metrics_test[i_cv] = [loss, acc, bal_acc]
