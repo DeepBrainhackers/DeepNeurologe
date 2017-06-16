@@ -53,11 +53,12 @@ def run(data_folder, save_folder, batch_size=10):
         print 'Test: '
         print loss, acc, bal_acc
         metrics_test[i_cv] = [loss, acc, bal_acc]
-
+    print 'Avg. test metrics:'
+    print metrics_test.mean(axis=0)
     np.save(osp.join(save_folder, 'metrics_test_cv.npy'), metrics_test)
 
 
 if __name__ == '__main__':
     data_dir = '/home/paulgpu/git/DeepNeurologe'
-    save_dir = osp.join(data_dir, '4layers_small_10cv')
+    save_dir = osp.join(data_dir, '4layers_smallest_10cv')
     run(data_dir, save_dir)
