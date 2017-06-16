@@ -27,7 +27,7 @@ def run(data_folder, save_folder, batch_size=10):
     y_valid = to_categorical(y_valid, num_classes=2)
     y_test = to_categorical(y_test, num_classes=2)
 
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=1000, verbose=1, mode='min')
+    early_stopping = EarlyStopping(monitor='val_balanced_accuracy', min_delta=0.001, patience=50, verbose=1, mode='max')
     #lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=1., patience=1000, verbose=1, mode='min', min_lr=1e-4)
     csv_logger = CSVLogger(osp.join(save_folder, 'training.log'))
     tensorboard = TensorBoard(log_dir=osp.join(save_folder, 'tensorboard'), histogram_freq=0, write_graph=True,
@@ -36,7 +36,9 @@ def run(data_folder, save_folder, batch_size=10):
     network.fit(x=X_train, y=y_train, batch_size=batch_size, epochs=1000, verbose=1, validation_data=(X_valid, y_valid),
                 shuffle=True, callbacks=[early_stopping, csv_logger, tensorboard])
 
-    network.evaluate(x=X_test, y=y_test, batch_size=1, verbose=1)
+    loss, acc, bal_acc = network.evaluate(x=X_test, y=y_test, batch_size=10, verbose=1)
+    print 'Test: '
+    print loss, acc, bal_acc
 
 
 def create_train_valid_test(X, y):
@@ -47,6 +49,6 @@ def create_train_valid_test(X, y):
 
 if __name__ == '__main__':
     data_dir = '/home/paulgpu/git/DeepNeurologe'
-    save_dir = osp.join(data_dir, '4layers')
+    save_dir = osp.join(data_dir, '4layers_100fc_earlystopping')
     run(data_dir, save_dir)
 

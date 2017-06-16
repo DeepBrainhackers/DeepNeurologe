@@ -87,10 +87,10 @@ def init_network(n_classes=2):
     input_dtype = K.floatx()
 
     conv_params = [
-        {'filters': 64, 'kernel_size': (5, 5, 5), 'strides': (1, 1, 1)},
-        {'filters': 32, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
+        {'filters': 32, 'kernel_size': (5, 5, 5), 'strides': (1, 1, 1)},
         {'filters': 16, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
-        {'filters': 8, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)}
+        {'filters': 8, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)},
+        {'filters': 4, "kernel_size": (3, 3, 3), "strides": (1, 1, 1)}
     ]
     maxpooling_params = [
         {'pool_size': (4, 4, 4), 'strides': (1, 1, 1)},
@@ -100,7 +100,7 @@ def init_network(n_classes=2):
 
     ]
     fc_params = [
-        {'units': 500},
+        {'units': 200},
         {'units': 100},
         {'units': 50}
     ]
