@@ -19,9 +19,9 @@ def run(data_folder, save_folder, batch_size=1):
     X_train, X_valid, X_test, y_train, y_valid, y_test = create_train_valid_test(X, y)
     mean_train = X_train.mean(axis=0, keepdims=True)
     std_train = X_train.std(axis=0, keepdims=True)
-    X_train = (X_train - mean_train)/std_train
-    X_valid = (X_valid - mean_train)/std_train
-    X_test = (X_test - mean_train)/std_train
+    X_train = (X_train - mean_train)/(std_train + 0.0001)
+    X_valid = (X_valid - mean_train)/(std_train + 0.0001)
+    X_test = (X_test - mean_train)/(std_train + 0.0001)
 
     y_train = to_categorical(y_train, num_classes=2)
     y_valid = to_categorical(y_valid, num_classes=2)
@@ -29,8 +29,8 @@ def run(data_folder, save_folder, batch_size=1):
 
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=200, verbose=1, mode='min')
     lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.9, patience=20, verbose=1, mode='min', min_lr=1e-4)
-    csv_logger = CSVLogger(osp.join(save_folder, data_folder, 'training.log'))
-    tensorboard = TensorBoard(log_dir=osp.join(save_folder, data_folder, 'tensorboard'), histogram_freq=1, write_graph=True,
+    csv_logger = CSVLogger(osp.join(save_folder, 'training.log'))
+    tensorboard = TensorBoard(log_dir=osp.join(save_folder, 'tensorboard'), histogram_freq=0, write_graph=True,
                               write_images=True)
 
     network.fit(x=X_train, y=y_train, batch_size=batch_size, epochs=1000, verbose=1, validation_data=(X_valid, y_valid),
