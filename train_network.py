@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 import numpy as np
+import os
 import os.path as osp
 from keras.utils import to_categorical
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, CSVLogger, TensorBoard
@@ -7,7 +8,10 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau, CSVLogger, TensorB
 from data_handling import load_data, load_labels, get_network
 
 
-def run(data_folder, batch_size=1):
+def run(data_folder, save_folder, batch_size=1):
+    if not osp.exists(save_folder):
+        os.makedirs(save_folder)
+	
     y = load_labels(data_folder)
     X = load_data(data_folder)
     network = get_network(n_classes=np.unique(y).size)
@@ -25,8 +29,8 @@ def run(data_folder, batch_size=1):
 
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.01, patience=200, verbose=1, mode='min')
     lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.9, patience=20, verbose=1, mode='min', min_lr=1e-4)
-    csv_logger = CSVLogger(osp.join(data_folder, 'training.log'))
-    tensorboard = TensorBoard(log_dir=osp.join(data_folder, 'tensorboard'), histogram_freq=1, write_graph=True,
+    csv_logger = CSVLogger(osp.join(save_folder, data_folder, 'training.log'))
+    tensorboard = TensorBoard(log_dir=osp.join(save_folder, data_folder, 'tensorboard'), histogram_freq=1, write_graph=True,
                               write_images=True)
 
     network.fit(x=X_train, y=y_train, batch_size=batch_size, epochs=1000, verbose=1, validation_data=(X_valid, y_valid),
@@ -43,6 +47,6 @@ def create_train_valid_test(X, y):
 
 if __name__ == '__main__':
     data_dir = '/home/paulgpu/git/DeepNeurologe'
-    run(data_dir)
-
+    save_dir = osp.join(data_dir, '4layers')
+    run(data_dir, save_dir)
 
