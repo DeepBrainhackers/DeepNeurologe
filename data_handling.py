@@ -4,6 +4,27 @@ import os.path as osp
 import numpy as np
 import pandas as pd
 import nibabel as nib
+from deepNeurologe_keras import init_network
+
+
+
+def get_network(n_classes=2):
+    return init_network(n_classes=n_classes)
+
+
+def load_labels(data_folder):
+    return pd.read_csv(osp.join(data_folder, 'meta.csv')).DX.values
+
+
+def atleast_5d(arr):
+    if len(arr.shape) != 5:
+        arr = arr[..., np.newaxis]
+    return arr
+
+
+def load_data(data_folder, postfix='6mm'):
+    return atleast_5d(np.load(osp.join(data_folder, 'data_{}.npy'.format(postfix))))
+
 
 
 def get_data(parent_folder, tag, file_name):

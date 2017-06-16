@@ -119,9 +119,9 @@ def init_network(n_classes=2):
     # dropout_params = {1: 0.5, 2: 0.3}
     dropout_params = {1: 0.5}
 
-    model = deep_psych_net(input_shape, conv_params, maxpooling_params, fc_params, dropout_params, output_params,
-                           input_dtype)
-    model.compile(optimizer='adam', loss=loss, metrics=['accuracy', balanced_accuracy], loss_weights=loss_weights)
+    model = deep_neurologe_net(input_shape, conv_params, maxpooling_params, fc_params, dropout_params, output_params,
+                               input_dtype)
+    model.compile(optimizer='sgd', loss=loss, metrics=['accuracy', balanced_accuracy], loss_weights=loss_weights)
     model.summary()
     return model
 
